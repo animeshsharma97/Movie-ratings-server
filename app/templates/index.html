@@ -1,29 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Movie Ratings Prediction</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="jumbotron">
-    <div class="container">
-    <div class="page-header"><h1><span style="color: blue;">Welcome to the Movie Ratings Prediction System!</span></h1></div>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.review.label }}<br>
-            {{ form.review(rows='10',cols='100') }}
-        </p>
-        {% for error in form.review.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-        <br>
-        <p>
-        <button type="button" class="btn btn-default">{{ form.submit() }}</button>
-      </p>
-    </form>
-  </div>
-  </div>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+  Welcome movie freak!
+<br>
+  The server says : Infinity war is the best!
+</div>
+
+{% endblock %}

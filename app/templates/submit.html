@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.review.label }}<br>
+            {{ form.review(rows='10',cols='100') }}
+        </p>
+        {% for error in form.review.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <br>
+        <p>
+        <button type="button" class="btn btn-default">{{ form.submit() }}</button>
+      </p>
+    </form>
+{% endblock %}
