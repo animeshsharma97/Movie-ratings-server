@@ -13,7 +13,7 @@ from nltk.tokenize import word_tokenize
 from sklearn.cross_validation import train_test_split
 
 stopwords = stopwords.words('english')
-newStopWords = ['',' ','  ','   ','    ',' s']
+newStopWords = ['', ' ', '  ', '   ', '    ', ' s']
 stopwords.extend(newStopWords)
 stopwords.remove('no')
 stopwords.remove('not')
@@ -22,11 +22,10 @@ stop_words = set(stopwords)
 
 def clean_doc(doc, vocab=None):
     tokens = word_tokenize(doc)
-    tokens = [re.sub('[^a-zA-Z]',' ', word) for word in tokens]
+    tokens = [re.sub('[^a-zA-Z]', ' ', word) for word in tokens]
     tokens = [word.lower() for word in tokens]
     tokens = [w for w in tokens if not w in stop_words]
     tokens = [word for word in tokens if len(word) > 1]
-    
     if vocab:
         tokens = [w for w in tokens if w in vocab]
         tokens = ' '.join(tokens)        
@@ -38,21 +37,19 @@ def add_doc_to_vocab(text, vocab):
     vocab.update(tokens)
 
 vocab = Counter()
-df = pd.read_csv('train.tsv',delimiter='\t')
-df = df.iloc[:60000,:]
+df = pd.read_csv('train.tsv', delimiter='\t')
 
 X = df['Phrase']
 y = df['Sentiment']
 y = np_utils.to_categorical(y)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 0)
-del df,X,y
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0)
+del df, X, y
 
 len_train = len(X_train)
 for i in range(len_train):
     text = X_train.iloc[i]
-    add_doc_to_vocab(text , vocab)
-
+    add_doc_to_vocab(text, vocab)
 
 print(len(vocab))
 print(vocab.most_common(20))
@@ -83,14 +80,14 @@ vocab = set(vocab)
 train_doc = []
 for i in range(len_train):
     text = X_train.iloc[i]
-    doc = clean_doc(text , vocab)
+    doc = clean_doc(text, vocab)
     train_doc.append(doc)
 
 test_doc = []
 len_test = len(X_test)
 for i in range(len_test):
     text = X_test.iloc[i]
-    doc = clean_doc(text , vocab)
+    doc = clean_doc(text, vocab)
     test_doc.append(doc)
 
 index_train = []
@@ -117,9 +114,9 @@ n_words = X_test.shape[1]
 
 # LSTM Model
 model = Sequential()
-model.add(Bidirectional(LSTM(100, activation='relu') ,input_shape=(None,n_words)))
+model.add(Bidirectional(LSTM(100, activation='relu'), input_shape=(None,n_words)))
 model.add(Dropout(0.2))
-model.add(Dense(units=50,input_dim=100, activation='relu'))
+model.add(Dense(units=50, input_dim=100, activation='relu'))
 model.add(Dense(5, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
@@ -138,5 +135,5 @@ model_rnn = load_model('rnn.h5')
 # taking new input from keyboard
 new_doc = [input()]
 new_doc = tokenizer.texts_to_matrix(new_doc)
-pred = np.argmax(model_rnn.predict(new_doc.reshape((1,1,n_words))))
-print('\n{} stars'.format(pred+1))
+pred = np.argmax(model_rnn.predict(new_doc.reshape((1, 1, n_words))))
+print('\n{} stars'.format(pred + 1))
